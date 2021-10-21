@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8">
+    <title>Librería | AK</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+  </head>
+  <body>
+	  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color:#0A0808;">
+	  <div class="container-fluid">
+	    <div class="collapse navbar-collapse" id="navbarNav">
+	      <ul class="navbar-nav">
+	        <li class="nav-item">
+	          <a class="nav-link active" aria-current="page" th:href="@{/}">Home</a>
+	        </li>
+	        <li class="nav-item">
+	          <a class="nav-link active" aria-current="page" th:href="@{/acceso}">Administrar</a>
+	        </li>
+	        <li class="nav-item">
+	          <a class="nav-link active" aria-current="page" th:href="@{/prestamo}">Préstamo</a>
+	        </li>
+	      </ul>
+	    </div>
+	  </div>
+	</nav>
+    	<div th:if="${error}" class="alert alert-warning alert-dismissible fade show" role="alert">
+		  <strong th:text="'NO SE PUDO MODIFICAR: '+${error}">Holy guacamole!</strong>
+		  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div> 
+		<br>
+	  	<form class="row g-3" method="POST" th:action="@{/libro/editar_eliminar-libro}">
+	  		<div class="col-auto">
+			    <input type="number" class="form-control" name="isbn" placeholder="Ingrese el isbn del libro a buscar">
+			</div>
+			<div class="col-auto">
+			    <button type="submit" class="btn btn-primary mb-3">Buscar</button>
+			</div>	
+	  	</form>
+	  	<form th:action="@{/prestamo/enviar-libros}" method="GET">
+		  	<table class="table" style="background-color:#0A0808; color: whitesmoke;">
+	      	<thead>
+	      		<tr>
+	      			<th>Check</th>
+	      			<th>ISBN</th>
+	      			<th>Titulo</th>
+	      			<th>Año</th>
+	      			<th>Ejemplares</th>
+	      			<th>Prestados</th>
+	      			<th>Autor</th>
+	      			<th>Editorial</th>
+	      		</tr>
+	      	</thead>
+	      	<tbody>
+	      		<tr th:each="libro : ${libros}" th:if="${libro.isbn} != 1234567891234">
+	      			<td><input type="checkbox" th:value="${libro.isbn}" name="libros"></input></td>
+	      			<td th:text="${libro.isbn}"></td>
+	      			<td th:text="${libro.titulo}"></td>
+	      			<td th:text="${libro.anio}"></td>
+	      			<td th:text="${libro.ejemplares}"></td>
+	      			<td th:text="${libro.prestados}"></td>
+	      			<td th:text="${libro.autor.nombre}"></td>
+	      			<td th:text="${libro.editorial.nombre}"></td>
+	      		</tr>
+	      	</tbody>
+	      </table>
+	      	<input type = "submit"></input>
+	  	</form>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-W8fXfP3gkOKtndU4JGtKDvXbO53Wy8SZCQHczT5FMiiqmQfUpWbYdTil/SxwZgAN" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
+  </body>
+</html>

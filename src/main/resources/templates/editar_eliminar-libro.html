@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Librería | AK</title>
+    
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+  </head>
+  <body>
+	  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color:#0A0808;">
+		  <div class="container-fluid">
+		    <div class="collapse navbar-collapse" id="navbarNav">
+		      <ul class="navbar-nav">
+		        <li class="nav-item">
+		          <a class="nav-link active" aria-current="page" th:href="@{/}">Home</a>
+		        </li>
+		        <li class="nav-item">
+		          <a class="nav-link active" aria-current="page" th:href="@{/acceso}">Administrar</a>
+		        </li>
+		        <li class="nav-item">
+		          <a class="nav-link active" aria-current="page" th:href="@{/prestamo}">Préstamo</a>
+		        </li>
+		      </ul>
+		    </div>
+		  </div>
+	  </nav>
+	    <div th:if="${error}" class="alert alert-warning alert-dismissible fade show" role="alert">
+		  <strong th:text="'NO SE PUDO MODIFICAR: '+${error}">Holy guacamole!</strong>
+		  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div> 
+		<div th:if="${ok}" class="alert alert-success alert-dismissible fade show" role="alert">
+		  <strong>Libro modificado con exito!</strong>
+		  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div> 
+	<br>
+	<br>	
+		<form class="row g-3" method="POST" th:action="@{/libro/editar_eliminar-libro}">
+	  		<div class="col-auto">
+			    <label for="inputPassword2" class="visually-hidden">Password</label>
+			    <input type="number" class="form-control" id="inputPassword2" name="isbn" placeholder="Ingrese el isbn del libro a buscar">
+			</div>
+			<div class="col-auto">
+			    <button type="submit" class="btn btn-primary mb-3">Buscar</button>
+			</div>	
+	  	</form>
+				<table class="table" style="background-color:#0A0808; color: whitesmoke;">
+			      	<thead>
+			      		<tr>
+			      			<th>ISBN</th>
+			      			<th>Titulo</th>
+			      			<th>Año</th>
+			      			<th>Ejemplares</th>
+			      			<th>Prestados</th>
+			      			<th>Autor</th>
+			      			<th>Editorial</th>
+			      			<th colspan="2">Acciones de editar</th>
+			      		</tr>
+			      	</thead>
+			      	<tbody>
+			      		<tr th:each="libro : ${libros}" th:if="${libro.isbn} != 1234567891234">
+			      			<td th:text="${libro.isbn}"></td>
+			      			<td th:text="${libro.titulo}"></td>
+			      			<td th:text="${libro.anio}"></td>
+			      			<td th:text="${libro.ejemplares}"></td>
+			      			<td th:text="${libro.prestados}"></td>
+			      			<td th:text="${libro.autor.nombre}"></td>
+			      			<td th:text="${libro.editorial.nombre}"></td>
+			      			<td> <a th:href="@{/libro/borrar-libro}+'?isbn='+${libro.isbn}"> <button type="button" class="btn btn-light">Eliminar</button></a></td>
+			      			<td> <a th:href="@{/libro/modificar-libro}+'?isbn='+${libro.isbn}"> <button type="button" class="btn btn-light">Modificar</button></a></td>
+			      		</tr>
+			      	</tbody>
+			   </table>    
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-W8fXfP3gkOKtndU4JGtKDvXbO53Wy8SZCQHczT5FMiiqmQfUpWbYdTil/SxwZgAN" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
+  </body>
+</html>

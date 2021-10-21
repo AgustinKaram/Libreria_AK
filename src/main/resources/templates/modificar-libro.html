@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es-AR" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8">
+    <title>Librería | AK</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+  </head>
+  <body>
+	  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color:#0A0808;">
+	  <div class="container-fluid">
+	    <div class="collapse navbar-collapse" id="navbarNav">
+	      <ul class="navbar-nav">
+	        <li class="nav-item">
+	          <a class="nav-link active" aria-current="page" th:href="@{/}">Home</a>
+	        </li>
+	        <li class="nav-item">
+	          <a class="nav-link active" aria-current="page" th:href="@{/acceso}">Administrar</a>
+	        </li>
+	        <li class="nav-item">
+	          <a class="nav-link active" aria-current="page" th:href="@{/prestamo}">Préstamo</a>
+	        </li>
+	      </ul>
+	    </div>
+	  </div>
+	</nav>
+    <div class="login-box">
+      <img src="/img/logo2.jpg" class="avatar" alt="Avatar Image">
+      <div class="login-box crear-libro">	
+	      <form th:action= "@{/libro/modificarlibro}" method="POST" th:object="${libro}">
+	      	<input type="hidden" th:field="${libro.isbn}" placeholder="Codigo isbn."><br>
+	      	<label for= "titulo">Título:</label><br>
+	      	<input type="text" th:field="${libro.titulo}" placeholder="Nombre del título."><br>
+	      	<label for= "anio">Año:</label><br>
+	      	<input type="text" th:field="${libro.anio}" placeholder="Año de publicación."><br>
+	      	<label for= "ejemplares">Cantidad de ejemplares:</label><br>
+	      	<input type="text" th:field="${libro.ejemplares}" placeholder="Ingrese la cantidad."><br>
+	      	<label for= "nombreAutor">Nombre y apellido del autor:</label><br>
+	      	<input type="text" th:field="${libro.autor.nombre}" placeholder="Nombre del autor."><br>
+	      	<label for= "nombreEditorial">Nombre de la editorial:</label><br>
+	      	<input type="text" th:field="${libro.editorial.nombre}" placeholder="Nombre de la editorial."><br>
+	      	<input type="submit">
+	      </form>
+      </div>    
+    </div>  
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-W8fXfP3gkOKtndU4JGtKDvXbO53Wy8SZCQHczT5FMiiqmQfUpWbYdTil/SxwZgAN" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
+  </body>
+</html>

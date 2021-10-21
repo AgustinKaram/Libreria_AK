@@ -1,0 +1,163 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: url(../img/Fondo.jpg) no-repeat center top;
+    background-size: cover;
+    font-family: sans-serif;
+    height: 100vh;
+  }
+  
+  .login-box {
+    width: 320px;
+    height: 450px;
+    background: #6b705c;
+    color: #fff;
+    top: 53%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    box-sizing: border-box;
+    border-radius: 10%;
+    text-align: center;
+  }
+  
+  .login-box .avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    position: absolute;
+    top: -50px;
+    left: calc(50% - 50px);
+    opacity:0.95;
+  }
+  
+  .login-box h1 {
+	margin-top:60px;
+    text-align: center;
+    font-size: 22px;
+    letter-spacing: 1px;
+  }
+  
+  .login-box .cajas{
+	position: absolute;
+    width: 80%;
+    height: 50px;
+	left:11%;
+    background-color: #dda15e;
+    border-radius: 5px;
+  }
+  
+  .login-box .absolute {
+    top:29%;
+    background-color: unset;
+    font-family: 'Slabo 27px', serif;
+  }
+  
+  .login-box .absolute1 {
+    top:63%;
+  }
+  .login-box .absolute2 {
+    top:80%;
+  }
+    
+  .login-box a {
+	display: inline-block;
+    text-decoration: none;
+    font-size: 20px;
+    line-height: 20px;
+    color: #fff;
+    margin-top: 15px;
+    letter-spacing: 2px;
+  }
+  
+  .login-box a:hover {
+    color: #9b2226;
+  }
+  
+  .login-box .acceso {
+	position: absolute;
+    top:63%;
+	left:11%;
+  }
+  
+  label {
+	letter-spacing: 2px;
+	font-style: italic;
+	font-weight: bold;
+	font-size: 17px;
+	color: black;
+	margin-bottom: 15px;
+  }
+  
+  .login-box .ad_absolute {
+    top:25%;
+    background-color: unset;
+    font-family: 'Slabo 27px', serif;
+  }
+  
+  .login-box .ad_absolute1 {
+    top:50%;
+  }
+  .login-box .ad_absolute2 {
+    top:65%;
+  }
+  .login-box .ad_absolute3 {
+    top:80%;
+  }
+  
+  .login-box .crear-libro{
+	
+	position: absolute;
+	height:370px;
+	font-size: 15px;
+}
+  
+   .login-box .crear-libro label{
+	
+	margin-bottom: 2px;
+	margin-top: 2px;
+}
+
+.login-box .alert{
+	
+	position: relative;
+	z-index: 1;
+	
+}
+
+	input[type="submit"]{
+		background-color: #0A0808;
+		color: white;
+		padding:5px;
+		margin-top:10px;
+		border-radius: 3px;
+	}
+	
+.login-box button {
+		background-color: #0A0808;
+		text-decoration: none;
+		color: white;
+		margin-top:6px;
+		border-radius: 3px;
+	}
+
+  
+.login-box .div_absolute {
+    top:21%;
+    background-color: unset;
+    font-family: 'Slabo 27px', serif;
+  }
+  
+  .login-box .div_absolute1 {
+    top:40%;
+  }
+  .login-box .div_absolute2 {
+    top:55%;
+  }
+  .login-box .div_absolute3 {
+    top:70%;
+  }
+  
+  .login-box .div_absolute4 {
+    top:85%;
+  }

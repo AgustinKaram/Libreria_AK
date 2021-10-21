@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es-AR" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8">
+    <title>Librería | AK</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+  </head>
+  <body>
+	  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color:#0A0808;">
+	  <div class="container-fluid">
+	    <div class="collapse navbar-collapse" id="navbarNav">
+	      <ul class="navbar-nav">
+	        <li class="nav-item">
+	          <a class="nav-link active" aria-current="page" th:href="@{/}">Home</a>
+	        </li>
+	        <li class="nav-item">
+	          <a class="nav-link active" aria-current="page" th:href="@{/acceso}">Administrar</a>
+	        </li>
+	        <li class="nav-item">
+	          <a class="nav-link active" aria-current="page" th:href="@{/prestamo}">Préstamo</a>
+	        </li>
+	      </ul>
+	    </div>
+	  </div>
+	</nav>
+    <div class="login-box">
+      <img src="/img/logo2.jpg" class="avatar" alt="Avatar Image">
+      <div class="login-box crear-libro">	
+	      <form th:action= "@{/prestamo/crear-prestamo}" method="POST">
+	      	<label for= "devolucion">Fecha de devolución:</label><br>
+	      	<input type="date" id="devolucion" name="devolucion"><br>
+	      	<label for= "libros">Isbn:</label><br>
+	      	<input type="text" id="libros" name="libros" placeholder="Ingrese el isbn del libro." th:value="${libros}">
+	      	<button type="button"><a th:href="@{/prestamo/mostrar-libros}">Consultar libros</a></button>
+	      	<label for= "documento">DNI del cliente:</label><br>
+	      	<input type="text" id="documento" name="documento" placeholder="DNI del solicitante."><br>
+	      	<input type="submit">
+	      </form>
+      </div>
+      	<div th:if="${error}" class="alert alert-warning alert-dismissible fade show" role="alert">
+		  <strong th:text="${error}">Holy guacamole!</strong>
+		  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>
+		<div th:if="${ok}" class="alert alert-success alert-dismissible fade show" role="alert">
+		  <strong>Préstamo creado con éxito!</strong>
+		  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>  
+    </div>  
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-W8fXfP3gkOKtndU4JGtKDvXbO53Wy8SZCQHczT5FMiiqmQfUpWbYdTil/SxwZgAN" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
+  </body>
+</html>
