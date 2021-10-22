@@ -1,5 +1,6 @@
 package com.libreriaAK.app.controladores;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +64,20 @@ public class ClienteController {
 		try{
 			List<Cliente> listaClientes = clienteService.traerClientes();
 			model.addAttribute("clientes", listaClientes);
+		}catch(LibreriaException e) {
+			model.addAttribute("error", e.getMessage());
+			return "mostrar-clientes";
+		}
+		return "mostrar-clientes";
+	}
+	
+	@PostMapping("/mostrar-clientes")
+	public String mostrarCliente1(Model model, @RequestParam Long documento){
+		try{
+			List<Cliente> clientes = new ArrayList<Cliente>();
+			Cliente c = clienteService.traerCliente(documento);
+			clientes.add(c);
+			model.addAttribute("clientes", clientes);
 		}catch(LibreriaException e) {
 			model.addAttribute("error", e.getMessage());
 			return "mostrar-clientes";

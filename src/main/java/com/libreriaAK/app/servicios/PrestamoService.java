@@ -15,7 +15,6 @@ import com.libreriaAK.app.entidades.Cliente;
 import com.libreriaAK.app.entidades.Libro;
 import com.libreriaAK.app.entidades.Prestamo;
 import com.libreriaAK.app.exceptions.LibreriaException;
-import com.libreriaAK.app.repositorios.ClienteRepository;
 import com.libreriaAK.app.repositorios.LibroRepository;
 import com.libreriaAK.app.repositorios.PrestamoRepository;
 
@@ -26,7 +25,7 @@ public class PrestamoService {
 	PrestamoRepository prestamoRepository;
 	
 	@Autowired
-	ClienteRepository clienteRepository;
+	ClienteService clienteService;
 	
 	@Autowired
 	LibroRepository libroRepository;
@@ -38,51 +37,47 @@ public class PrestamoService {
 	public void crearPrestamo (Date devolucion, String libros, Long documento) throws LibreriaException{
 		try {
 			Prestamo prestamo = new Prestamo();
-			Optional<Cliente> c = clienteRepository.findById(documento);
-			if(c.isPresent()) {
-				prestamo.setFecha();
-				prestamo.setDevolucion(devolucion);
-				/* 
-				 Estos codigos son para buscar todos los libros que el cliente desea pedir prestado
-				 y pasarselos a la entidad prestamo la lista de libros que desea pedir prestado.
-				 */
-				String[] listaLibros = libros.split(",");
-				List<Long> listaLibrosL = new ArrayList<Long>();
-				for(int i = 0 ; i < listaLibros.length ; i++) {
-					listaLibrosL.add(Long.parseLong(listaLibros[i]));
-				}	
-				if(listaLibros.length == 1) {
-					Optional<Libro> l = libroRepository.findById(Long.parseLong(listaLibros[0]));
-					if(l.isPresent()) {
-						List<Libro> li = new ArrayList<Libro>();
-						libroService.prestarLibro(l.get().getIsbn());
-						li.add(l.get());
-						Optional<Libro> l2 = libroRepository.findById(1234567891234L);
-						if(l2.isPresent()) {
-							libroService.prestarLibro(l2.get().getIsbn());
-							li.add(l2.get());
-						}
-						prestamo.setLibros(li);
-					}else {
-						throw new LibreriaException("Libro no disponible o no encontrado.");
-					}
-				}else if (listaLibros.length == 2) {
-					Iterable<Libro> listaLibrosAprestar = libroRepository.findAllById(listaLibrosL);
+			Cliente c = clienteService.traerCliente(documento);
+			prestamo.setCliente(c);
+			prestamo.setFecha();
+			prestamo.setDevolucion(devolucion);
+			/* 
+			 Estos codigos son para buscar todos los libros que el cliente desea pedir prestado
+			 y pasarselos a la entidad prestamo la lista de libros que desea pedir prestado.
+			 */
+			String[] listaLibros = libros.split(",");
+			List<Long> listaLibrosL = new ArrayList<Long>();
+			for(int i = 0 ; i < listaLibros.length ; i++) {
+				listaLibrosL.add(Long.parseLong(listaLibros[i]));
+			}	
+			if(listaLibros.length == 1) {
+				Optional<Libro> l = libroRepository.findById(Long.parseLong(listaLibros[0]));
+				if(l.isPresent()) {
 					List<Libro> li = new ArrayList<Libro>();
-					for(Libro l : listaLibrosAprestar) {
-						libroService.prestarLibro(l.getIsbn());
-						li.add(l);
+					libroService.prestarLibro(l.get().getIsbn());
+					li.add(l.get());
+					Optional<Libro> l2 = libroRepository.findById(1234567891234L);
+					if(l2.isPresent()) {
+						libroService.prestarLibro(l2.get().getIsbn());
+						li.add(l2.get());
 					}
 					prestamo.setLibros(li);
 				}else {
-					throw new LibreriaException("No se puede prestar mas de dos libros.");
+					throw new LibreriaException("Libro no disponible o no encontrado.");
 				}
-				// aca termina de setear los libros
-				prestamo.setCliente(c.get());
+			}else if (listaLibros.length == 2) {
+				Iterable<Libro> listaLibrosAprestar = libroRepository.findAllById(listaLibrosL);
+				List<Libro> li = new ArrayList<Libro>();
+				for(Libro l : listaLibrosAprestar) {
+					libroService.prestarLibro(l.getIsbn());
+					li.add(l);
+				}
+				prestamo.setLibros(li);
 			}else {
-				throw new LibreriaException("Cliente no registrado");
+				throw new LibreriaException("No se puede prestar mas de dos libros.");
 			}
-			prestamoRepository.save(prestamo);
+			// aca termina de setear los libros	
+		prestamoRepository.save(prestamo);
 		}catch(LibreriaException e) {
 			throw e;
 		}catch(Exception e) {
@@ -107,6 +102,13 @@ public class PrestamoService {
 			}else {
 				throw new LibreriaException("No hay prestamo vinculado a ese id.");
 			}
+	}
+	
+	public List<Prestamo> mostrarPrestamo(Long documento){
+		List<Prestamo> prestamos = new ArrayList<Prestamo>();
+		Prestamo p = prestamoRepository.traerPrestamoPorCliente(documento);
+		prestamos.add(p);
+		return prestamos;
 	}
 	
 	@Transactional
@@ -137,44 +139,40 @@ public class PrestamoService {
 				throw new LibreriaException("No existe el prestamo a modificar.");
 			}
 			//evaluamos si existe el cliente
-			Optional<Cliente> c = clienteRepository.findById(documento);
-			if(c.isPresent()) {
-				prestamo.setCliente(c.get());
-				prestamo.setDevolucion(devolucion);
-				/* 
-				 Estos codigos son para buscar todos los libros que el cliente desea pedir prestado
-				 y pasarselos a la entidad prestamo la lista de libros que desea pedir prestado.
-				 */
-				String[] listaLibros = libros.split(",");
-				List<Long> listaLibrosL = new ArrayList<Long>();
-				for(int i = 0 ; i < listaLibros.length ; i++) {
-					listaLibrosL.add(Long.parseLong(listaLibros[i]));
-				}	
-				if(listaLibros.length == 1) {
-					Optional<Libro> l = libroRepository.findById(Long.parseLong(listaLibros[0]));
-					if(l.isPresent()) {
-						List<Libro> li = new ArrayList<Libro>();
-						libroService.prestarLibro(l.get().getIsbn());
-						li.add(l.get());
-						prestamo.setLibros(li);
-					}else {
-						throw new LibreriaException("Libro no disponible o no encontrado.");
-					}
-				}else if (listaLibros.length == 2) {
-					Iterable<Libro> listaLibrosAprestar = libroRepository.findAllById(listaLibrosL);
+			Cliente c = clienteService.traerCliente(documento);
+			prestamo.setCliente(c);
+			prestamo.setDevolucion(devolucion);
+			/* 
+			 Estos codigos son para buscar todos los libros que el cliente desea pedir prestado
+			 y pasarselos a la entidad prestamo la lista de libros que desea pedir prestado.
+			 */
+			String[] listaLibros = libros.split(",");
+			List<Long> listaLibrosL = new ArrayList<Long>();
+			for(int i = 0 ; i < listaLibros.length ; i++) {
+				listaLibrosL.add(Long.parseLong(listaLibros[i]));
+			}	
+			if(listaLibros.length == 1) {
+				Optional<Libro> l = libroRepository.findById(Long.parseLong(listaLibros[0]));
+				if(l.isPresent()) {
 					List<Libro> li = new ArrayList<Libro>();
-					for(Libro l : listaLibrosAprestar) {
-						libroService.prestarLibro(l.getIsbn());
-						li.add(l);
-					}
+					libroService.prestarLibro(l.get().getIsbn());
+					li.add(l.get());
 					prestamo.setLibros(li);
 				}else {
-					throw new LibreriaException("No se puede prestar mas de dos libros.");
+					throw new LibreriaException("Libro no disponible o no encontrado.");
 				}
-				// aca termina de setear los libros
+			}else if (listaLibros.length == 2) {
+				Iterable<Libro> listaLibrosAprestar = libroRepository.findAllById(listaLibrosL);
+				List<Libro> li = new ArrayList<Libro>();
+				for(Libro l : listaLibrosAprestar) {
+					libroService.prestarLibro(l.getIsbn());
+					li.add(l);
+				}
+				prestamo.setLibros(li);
 			}else {
-				throw new LibreriaException("Cliente no registrado");
+				throw new LibreriaException("No se puede prestar mas de dos libros.");
 			}
+			// aca termina de setear los libros
 			prestamoRepository.save(prestamo);
 		}catch(LibreriaException e) {
 			throw e;
@@ -184,7 +182,6 @@ public class PrestamoService {
 	}
 	
 	public void validarModificacion(String id, String devolucion, String libros, String documento) throws LibreriaException{
-		
 		if(devolucion == null || devolucion.isEmpty()) {
 			throw new LibreriaException("Fecha de devolucion inválida o vacia.");
 		}else {
@@ -209,6 +206,13 @@ public class PrestamoService {
 				throw new LibreriaException("Ingreso un caracter alfabético en el campo 'DNI'.");
 			}
 		}
+		//validamos que no puede haber dos prestamos de alta asignados a un mismo cliente
+		/*Prestamo p = prestamoRepository.traerPrestamoPorCliente(Long.parseLong(documento));
+		if( p != null) {
+			if(p.getId() != id) {
+				throw new LibreriaException("Un cliente no puede tener mas de un préstamo asociado.");
+			}
+		}*/		
 	}
 	
 	public void validarAlta (String devolucion, String libros, String documento) throws LibreriaException{
@@ -236,6 +240,11 @@ public class PrestamoService {
 			}catch(NumberFormatException ex) {
 				throw new LibreriaException("Ingreso un caracter alfabético en el campo 'DNI'.");
 			}
+		}
+		//validamos que no puede haber dos prestamos de alta asignados a un mismo cliente
+		Prestamo p = prestamoRepository.traerPrestamoPorCliente(Long.parseLong(documento));
+		if( p != null) {
+			throw new LibreriaException("Un cliente no puede tener mas de un préstamo asociado.");
 		}
 	}
 

@@ -82,7 +82,7 @@ public class ClienteService {
 			 if(cli.isPresent()) {
 				 return cli.get();
 			 }else {
-				 throw new LibreriaException("Libro no encontrado");
+				 throw new LibreriaException("Cliente no encontrado");
 			 }	
 		}catch(Exception e) {
 			throw new LibreriaException("Error de sistema.");

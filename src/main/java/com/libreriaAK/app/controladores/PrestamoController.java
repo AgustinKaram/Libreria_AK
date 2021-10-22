@@ -1,5 +1,6 @@
 package com.libreriaAK.app.controladores;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.libreriaAK.app.entidades.Libro;
 import com.libreriaAK.app.entidades.Prestamo;
 import com.libreriaAK.app.exceptions.LibreriaException;
+
 import com.libreriaAK.app.servicios.LibroService;
 import com.libreriaAK.app.servicios.PrestamoService;
 
@@ -26,7 +28,7 @@ public class PrestamoController {
 	
 	@Autowired
 	private PrestamoService prestamoService;
-	
+		
 	@Autowired
 	private LibroService libroService;
 	
@@ -67,14 +69,35 @@ public class PrestamoController {
 		}
 	}
 	
+	@PostMapping("/mostrar-prestamos")
+	public String mostrarPrestamos1(Model model, @RequestParam Long documento) {
+			List<Prestamo> prestamos = prestamoService.mostrarPrestamo(documento);
+			model.addAttribute("prestamos", prestamos);
+			return "mostrar-prestamos";
+	}
+	
 	@GetMapping("/mostrar-libros")
 	public String mostrarLibros(Model model) {
 			List <Libro> libros = libroService.mostrarLibreria();
 			model.addAttribute("libros", libros);
 			return "mostrar-libros";
 	}
-
 	
+	@PostMapping("/mostrar-libros")
+	public String mostrarLibros1(Model model,@RequestParam Long isbn) {
+		try {
+			List <Libro> libros = new ArrayList<Libro>();
+			Libro l = libroService.buscarLibro(isbn);
+			libros.add(l);
+			model.addAttribute("libros", libros);
+			return "mostrar-libros";
+		}catch(LibreriaException e) {
+			model.addAttribute("error", e.getMessage());
+			return "mostrar-libros";
+		}
+					
+	}
+
 	@GetMapping("/enviar-libros")
 	public String enviarLibros(RedirectAttributes redirectAt, @RequestParam String libros) {
 		redirectAt.addFlashAttribute("libros", libros);

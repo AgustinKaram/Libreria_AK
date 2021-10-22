@@ -34,9 +34,9 @@
 		  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 		</div>  
 		<br>
-	  	<form class="row g-3" method="POST" th:action="@{/libro/editar_eliminar-libro}">
+	  	<form class="row g-3" method="POST" th:action="@{/prestamo/mostrar-prestamos}">
 	  		<div class="col-auto">
-			    <input type="number" class="form-control" name="isbn" placeholder="Ingrese el isbn del libro a buscar">
+			    <input type="number" class="form-control" name="documento" placeholder="Buscar por DNI.">
 			</div>
 			<div class="col-auto">
 			    <button type="submit" class="btn btn-primary mb-3">Buscar</button>
